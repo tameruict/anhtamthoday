@@ -199,9 +199,6 @@ export default function ExamPageClient({
   const [showReviewPanel, setShowReviewPanel] = useState(false);
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const [showTabWarning, setShowTabWarning] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(
-    () => typeof document !== 'undefined' && Boolean(document.fullscreenElement),
-  );
   const [tabLockState, setTabLockState] = useState<'checking' | 'primary' | 'blocked'>(
     'checking',
   );
@@ -641,12 +638,11 @@ export default function ExamPageClient({
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [examData, isLoading, recordViolation]);
 
-  // Bắt buộc toàn màn hình: theo dõi trạng thái + ghi log khi thoát giữa giờ.
+  // Chống gian lận: ghi log khi thoát toàn màn hình giữa giờ (không cưỡng chế
+  // bật lại — nhiều thiết bị di động không hỗ trợ Fullscreen API).
   useEffect(() => {
     const handleFullscreenChange = () => {
-      const active = Boolean(document.fullscreenElement);
-      setIsFullscreen(active);
-      if (!active && examData && !isLoading) {
+      if (!document.fullscreenElement && examData && !isLoading) {
         recordViolation('fullscreen_exit');
       }
     };
@@ -903,19 +899,6 @@ export default function ExamPageClient({
         <div className={styles.tabWarning} role="alert" aria-live="assertive">
           <AlertTriangle size={16} aria-hidden="true" />
           <span>Bạn đã rời khỏi khu vực thi! ({tabSwitchCount} lần)</span>
-        </div>
-      )}
-
-      {!isFullscreen && examData && !isLoading && (
-        <div className={styles.fullscreenPrompt} role="alert">
-          <AlertTriangle size={16} />
-          <span>Bài thi yêu cầu chế độ toàn màn hình.</span>
-          <button
-            type="button"
-            onClick={() => void document.documentElement.requestFullscreen?.()}
-          >
-            Vào toàn màn hình
-          </button>
         </div>
       )}
 
