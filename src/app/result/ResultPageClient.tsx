@@ -16,7 +16,7 @@ import {
   type ExamQuestionType,
 } from '@/lib/supabase/exam-data';
 import { useExamStore } from '@/store/useExamStore';
-import QuestionRenderer from '@/components/question/QuestionRenderer';
+import QuestionRenderer, { MathText } from '@/components/question/QuestionRenderer';
 import type { RenderableQuestion } from '@/components/question/QuestionRenderer';
 import { formatHanoiDateTime } from '@/lib/datetime';
 import styles from '@/styles/result.module.css';
@@ -348,6 +348,24 @@ const ReviewItem = memo(function ReviewItem({
               </span>
             </div>
           </div>
+
+          {item.question.solution.explanation && (
+            <div className={styles.solutionBlock}>
+              <span className={styles.solutionTitle}>Hướng dẫn giải</span>
+              <div className={styles.solutionContent}>
+                <MathText value={item.question.solution.explanation} />
+              </div>
+            </div>
+          )}
+
+          {!item.question.solution.explanation && item.question.solution.locked && (
+            <div className={styles.solutionLocked}>
+              <span>Câu này có hướng dẫn giải chi tiết — mở khoá bằng gói VIP để xem.</span>
+              <Link className="btn outline small" href="/purchase">
+                Nâng cấp VIP
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>

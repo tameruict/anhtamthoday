@@ -584,6 +584,44 @@
   word-break: break-word;
 }
 
+/* Hướng dẫn giải (question_solutions.explanation) */
+.solutionBlock {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.solutionTitle {
+  display: block;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.solutionContent {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.solutionLocked {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--warning, orange) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--warning, orange) 40%, transparent);
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* ─── Bottom actions ─────────────────────────────────── */
 .actions {
   display: flex;

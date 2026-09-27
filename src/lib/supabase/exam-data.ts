@@ -701,6 +701,13 @@ export type SessionReviewShortAnswerKey = {
   answerType: string | null;
 };
 
+export type SessionReviewSolution = {
+  /** null khi câu không có lời giải HOẶC user chưa có quyền xem (xem `locked`). */
+  explanation: string | null;
+  /** true khi câu có lời giải nhưng bị khoá vì chưa mua VIP. */
+  locked: boolean;
+};
+
 export type SessionReviewAnswer = {
   answerJson: unknown;
   selectedOptionId: string | null;
@@ -725,6 +732,7 @@ export type SessionReviewQuestion = {
   options: SessionReviewOption[];
   trueFalseItems: SessionReviewTrueFalseItem[];
   shortAnswerKeys: SessionReviewShortAnswerKey[];
+  solution: SessionReviewSolution;
   answer: SessionReviewAnswer;
 };
 
@@ -790,6 +798,8 @@ type RawReviewQuestion = {
   options: RawReviewOption[] | null;
   true_false_items: RawReviewTfItem[] | null;
   short_answer_keys: { display: string | null; answer_type: string | null }[] | null;
+  explanation: string | null;
+  solution_locked: boolean | null;
   answer: {
     answer_json: unknown;
     selected_option_id: string | null;
@@ -866,6 +876,10 @@ export async function fetchSessionReview(
         display: k.display,
         answerType: k.answer_type,
       })),
+      solution: {
+        explanation: q.explanation ?? null,
+        locked: Boolean(q.solution_locked),
+      },
       answer: q.answer
         ? {
             answerJson: q.answer.answer_json,
